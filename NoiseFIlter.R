@@ -2,10 +2,11 @@ library(tuneR)
 library(ggplot2)
 library(pracma)
 # Wczytaj plik WAV
-dane_audio <- readWave("C:/Users/kubal/OneDrive/Dokumenty/Github/NoiseFilterR/src/fish.wav")
+dane_audio <- readWave("C:/Users/kubal/OneDrive/Dokumenty/Github/NoiseFilterR/src/kwiatuszek.wav")
 fs<-dane_audio@samp.rate
 amp=0.2
 f1=2000
+BW=30
 # Dokonaj FFT
 s1<-dane_audio@left
 audio1<-normalize(dane_audio)
@@ -21,9 +22,21 @@ fhat <- fft(s3)
 # Oblicz gęstość mocy (Power Spectral Density - PSD)
 Pds <- Re(fhat*Conj(fhat)/(length(dane_audio)))
 indeks_najwiekszej<- which.max(Pds)
+if (indeks_najwiekszej>(length(Pds)/2)) {
+  indeks_najwiekszej<-(length(Pds))-indeks_najwiekszej
+}
 frequency1 <- as.list(seq(0, (length(Pds) - 1)) * 44100 / length(Pds))
 print(frequency1[indeks_najwiekszej])
-prosze <- Pds < 4
+prosze<-logical(length(s3))
+for (i in 0:length(prosze)) {
+  if(i>(indeks_najwiekszej-30)&&(i<indeks_najwiekszej+30)){
+    prosze[i]=FALSE
+  } else if(i>(length(s3)- indeks_najwiekszej-30)&&(i<length(s3)- indeks_najwiekszej+30)){
+    prosze[i]=FALSE
+  }else{
+    prosze[i]=TRUE
+  }
+}
 Fhatclean=prosze*fhat
 Pdsclean<- Re(Fhatclean*Conj(Fhatclean)/(length(dane_audio)))
 # Stwórz ramkę danych do wykresu
