@@ -2,12 +2,18 @@ library(tuneR)
 library(ggplot2)
 library(pracma)
 # Wczytaj plik WAV
-sciezka_do_pliku <- "C:/Users/kubal/OneDrive/Dokumenty/Github/NoiseFilterR/src/1.wav"
 dane_audio <- readWave("C:/Users/kubal/OneDrive/Dokumenty/Github/NoiseFilterR/src/fish.wav")
+fs<-dane_audio@samp.rate
+amp=0.2
+f1=2000
 # Dokonaj FFT
 s1<-dane_audio@left
+audio1<-normalize(dane_audio)
 s2 <- s1 / 2^(dane_audio@bit -1)
-fhat <- fft(s2)
+timeValues<-(1:length(s2)) /fs
+s3<-s2+noise
+noise<- amp * sin(2 * pi * f1 * timeValues)
+fhat <- fft(s3)
 # Oblicz gęstość mocy (Power Spectral Density - PSD)
 Pds <- Re(fhat*Conj(fhat)/(length(dane_audio)))
 indeks_najwiekszej<- which.max(Pds)
@@ -27,3 +33,7 @@ ggplot(df, aes(x = frequency, y = Pdsclean)) +
        x = "Frequency (Hz)",
        y = "PSD") +
   theme_minimal()
+output=Re(ifft(Fhatclean))
+dane_audio@left<-output
+dane_audio<-normalize(dane_audio,unit = "16")
+writeWave(dane_audio,"C:/Users/kubal/OneDrive/Dokumenty/Github/NoiseFilterR/out/blagam.wav")
