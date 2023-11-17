@@ -2,7 +2,7 @@ library(tuneR)
 library(ggplot2)
 library(pracma)
 # Wczytaj plik WAV
-dane_audio <- readWave("C:/Users/kubal/OneDrive/Dokumenty/Github/NoiseFilterR/src/kwiatuszek.wav")
+dane_audio <- readWave("C:/Users/kubal/OneDrive/Dokumenty/Github/NoiseFilterR/src/fish.wav")
 fs<-dane_audio@samp.rate
 amp=0.2
 f1=2000
@@ -33,10 +33,11 @@ df <- data.frame(frequency = seq(0, (length(Pdsclean) - 1) ) * 44100 / length(Pd
 
 ggplot(df, aes(x = frequency, y = Pdsclean)) +
   geom_line() +
-  labs(title = "Power Spectral Density (PSD) KURAS",
+  labs(title = "Power Spectral Density (PSD) OutputSignal",
        x = "Frequency (Hz)",
        y = "PSD") +
   theme_minimal()
+ggsave("C:/Users/kubal/OneDrive/Dokumenty/Github/NoiseFilterR/plt/plot1.jpg")
 output=Re(ifft(Fhatclean))
 dane_audio@left<-output
 dane_audio<-normalize(dane_audio,unit = "16")
