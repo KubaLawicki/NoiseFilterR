@@ -2,11 +2,10 @@ library(tuneR)
 library(ggplot2)
 library(pracma)
 # Wczytaj plik WAV
-dane_audio <- readWave("C:/Users/kubal/OneDrive/Dokumenty/Github/NoiseFilterR/src/kwiatuszek.wav")
+dane_audio <- readWave("C:/Users/kubal/OneDrive/Dokumenty/Github/NoiseFilterR/src/aplauz.wav")
 fs<-dane_audio@samp.rate
-amp=0.2
-f1=2000
-BW=30
+amp<-2
+f1<-runif(1,100,10000)
 # Dokonaj FFT
 s1<-dane_audio@left
 audio1<-normalize(dane_audio)
