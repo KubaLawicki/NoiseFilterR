@@ -20,7 +20,7 @@ PlotAndSavePSD <- function( PDSclean, nazwa_pliku) {
 }
 
 # Wczytaj plik WAV
-dane_audio <- readWave("C:/Users/kubal/OneDrive/Dokumenty/Github/NoiseFilterR/src/fish.wav")
+dane_audio <- readWave("C:/Users/kubal/OneDrive/Dokumenty/Github/NoiseFilterR/src/aplauz.wav")
 
 #stale szumu
 fs<-dane_audio@samp.rate
